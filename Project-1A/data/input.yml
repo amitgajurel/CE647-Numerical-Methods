@@ -1,0 +1,34 @@
+# This is a text file which will be used as an input for the program
+---
+############ Soil Data ###################
+
+su0 : 100                     # Mudline strength value in psf
+k : 10                        # Strength gradient value in psf/ft
+gamma : 100                   # Assumed unit weight of soil in psf
+e50 : 0.02                    # Strain at 50% load to failure for soft clays, for medium = 0.010, for stiff = 0.005
+
+############ Pile Data ####################
+# Dimensions of the pile - Circular steel pile
+d0 : 36                       # outer diameter of pile in in.
+t : 1.5                       # wall thickness of pile in in.
+l : 100                       # length of pile in ft.
+
+# Properties of steel
+E : 29000000                  # Youngs Modulus of Steel in psi
+yield : 250000                # Yield Strength of steel in psi
+
+######## Program Data #######################
+# Discretization data
+nx : 10
+
+# Toleranace
+tol : 0.001
+
+# Defining P-y Curve . Hardwired API P-y curve
+yn : [0, 1.0, 3.0, 8.0, 15.0, 1000]
+pn : [0, 0.5, 0.72, 1, 1, 1]
+J : 0.5                       # Emphirical number for soft clay, For stiff clay use 0.25
+
+# Boundary Condition
+
+BC : 0                        # displacement controlled BC = 0; Force controlled BC = 1

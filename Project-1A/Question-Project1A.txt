@@ -1,0 +1,28 @@
+CVEN 647 – NUMERICAL METHODS IN GEOTECHNICAL ENGINEERING
+PROJECT IA
+Write a MATLAB program for a finite difference analysis of a laterally loaded pile in
+clay. Use a first-order finite difference formulation. Soil springs should be formulated in
+terms of the Matlock (1970) or equivalently, API curves for lateral bearing and loaddeflection
+in a soft clay.
+
+Inputs to the program should include:
+1. A user- specified undrained shear strength profile.
+2. Pile properties including length L, elastic modulus E, and moment of inertia I.
+3. Fixed versus free-head conditions.
+4. Applied lateral load at surface, H, or applied displacement at surface, y0.
+
+Outputs should include profiles of:
+1. Deflected shape of pile, y.
+2. Bending moments, M.
+3. Shear, V.
+4. Equivalent soil pressure, P.
+
+Do an analysis for the following test case:
+1. A 36-inch outer diameter, 100-ft long, circular steel pile, with a 1.5-inch wall
+thickness.
+2. The undrained shear strength profile shown below:
+su0 = 100 psf, with strength gradient k = 10 psf/ft.
+3. Load the pile under free-head conditions to a surface deflection y0 = 2 inches. Plot
+the profile of y, M, V, and P for this case. For your test case demonstrate that your
+iteration procedure converges to a stable solution.
+4. Repeat Part 3 for fixed-head conditions.
