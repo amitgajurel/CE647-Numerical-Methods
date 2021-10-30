@@ -19,16 +19,19 @@ yield : 250000                # Yield Strength of steel in psi
 
 ######## Program Data #######################
 # Discretization data
-nx : 10
+nx : 1000
 
 # Toleranace
-tol : 0.001
+tol : 0.01
 
 # Defining P-y Curve . Hardwired API P-y curve
 yn : [0, 1.0, 3.0, 8.0, 15.0, 1000]
 pn : [0, 0.5, 0.72, 1, 1, 1]
 J : 0.5                       # Emphirical number for soft clay, For stiff clay use 0.25
 
-# Boundary Condition
+# Boundary Conditions
 
-BC : 0                        # displacement controlled BC = 0; Force controlled BC = 1
+BC : 0                            # displacement controlled BC = 0; Force controlled BC = 1
+delta_force : 0.2                 # if BC = 0 provide the delta (ft.) and if BC = 1 provide force (lbs.)
+head_cond : 1                     # is equal to 0 for free head and 1 for fixed head
+tip_cond : 1                      # is equal to 0 for zero moment & zero shear at bottom i.e. floating pile; 1 for zero displacement and zero slope i.e. pile in rock
