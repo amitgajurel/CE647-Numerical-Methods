@@ -32,6 +32,6 @@ J : 0.5                       # Emphirical number for soft clay, For stiff clay 
 # Boundary Conditions
 
 BC : 0                            # displacement controlled BC = 0; Force controlled BC = 1
-delta_force : 0.2                 # if BC = 0 provide the delta (ft.) and if BC = 1 provide force (lbs.)
+delta_force : 2                   # if BC = 0 provide the delta (in.) and if BC = 1 provide force (lbs.)
 head_cond : 1                     # is equal to 0 for free head and 1 for fixed head
-tip_cond : 1                      # is equal to 0 for zero moment & zero shear at bottom i.e. floating pile; 1 for zero displacement and zero slope i.e. pile in rock
+tip_cond : 0                      # is equal to 0 for zero moment & zero shear at bottom i.e. floating pile; 1 for zero displacement and zero slope i.e. pile in rock

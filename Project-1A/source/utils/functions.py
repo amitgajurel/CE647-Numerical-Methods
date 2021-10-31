@@ -24,7 +24,7 @@ def stiffnessmatrix(BC,num,dx,ks,delta_Force,head_cond,tip_cond,EI):
     R = np.zeros((num,1))
 
     # Central Nodes
-    for idx,val in enumerate(np.arange(2,num-2,)):
+    for idx,val in enumerate(np.arange(2,num-2)):
         # Using 4th order beam bending problem with central difference 
         k[val,val-2] = 1
         k[val,val-1] = -4
@@ -36,7 +36,7 @@ def stiffnessmatrix(BC,num,dx,ks,delta_Force,head_cond,tip_cond,EI):
     if BC == 0:
         k[0,] = 0                                           # zero all
         k[0,0] = 1                                          # for displacement control
-        R[0,0] = delta_Force    
+        R[0,0] = delta_Force/12                             # Changing the unit from input in. to ft.   
     elif BC == 1:
         # Third order forward difference of shear force
         k[0,] = 0
@@ -85,4 +85,41 @@ def stiffnessmatrix(BC,num,dx,ks,delta_Force,head_cond,tip_cond,EI):
 
     return([k,R])
 
+def custom_plot(x,y,xlabel,ylabel,title):
+    """The function takes makes a pretty plot with labels for piles
+
+    Args:
+        x (array/list): List or array to plot in X-axis
+        y (array/list): List or array to plot in Y-axis
+        xlabel (string): String for Xlabel
+        ylabel (string): Strimg fpr Ylabel
+        title (string) : String for title
+    Output:
+        Plot object
+    """
+    import matplotlib as mpl
+    import matplotlib.pyplot as plt
+    import seaborn as sb
+    import pandas as pd
+    import numpy as np
+
+    fig, axs = plt.subplots(dpi=600)
+    fig.set_size_inches(6,6)
+    fig.tight_layout(pad=4)
+
+    axs.xaxis.set_tick_params(which='major', size=5, width=0.7, direction='in', top='on')
+    axs.xaxis.set_tick_params(which='minor', size=2.5, width=0.35, direction='in', top='on') 
+
+    axs.yaxis.set_tick_params(which='major', size=5, width=0.7, direction='in', right='on')
+    axs.yaxis.set_tick_params(which='minor', size=2.5, width=0.35, direction='in', right='on')
+
+    axs.plot(x,y,'--')
+    axs.invert_yaxis()
+
+    axs.set_title(title,fontsize=10,fontweight='bold')
+    axs.set_xlabel(xlabel)
+    axs.set_ylabel(ylabel)
+    axs.grid(linewidth='0.25')
     
+    plt.ioff()
+    return(fig)
