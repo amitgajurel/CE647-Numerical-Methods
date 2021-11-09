@@ -1,0 +1,25 @@
+CVEN 647 – NUMERICAL METHODS IN GEOTECHNICAL ENGINEERING
+PROJECT IB
+Write a MATLAB program for a finite difference analysis of an axially loaded pile in
+clay. Use a first-order finite difference formulation. Soil springs should be formulated in
+terms of the API curves for axial load transfer for side and tip resistance.
+Inputs to the program should include:
+ A user- specified undrained shear strength profile.
+ Adhesion factor  and tip bearing factor Nc.
+ Pile properties including length L, elastic modulus E, and area A.
+ Applied displacement at surface, z0.
+Outputs should include the following as a function of displacement:
+ Profile of side resistance versus depth
+ Total side resistance
+ Tip resistance
+ The sum of tip and total side resistance
+Do an analysis for the same test case as Project IA:
+ A 36-inch outer diameter, 100-ft long, circular steel pile, with a 1.5-inch wall
+thickness.
+ The undrained shear strength profile shown below:
+ su0 = 100 psf, with strength gradient k = 10 psf/ft.
+ Adhesion factor  = 0.85 and tip bearing factor Nc =9.
+ Load the pile under displacement control until ultimate load capacity is reached.
+Plot side resistance, tip resistance and total resistance as a function of vertical
+displacement at the top of the pile. Assume the pile is plugged in your tip
+resistance calculation.

@@ -1,0 +1,44 @@
+# This is a text file which will be used as an input for the program
+---
+############ Soil Data ###################
+
+su0 : 100                     # Mudline strength value in psf
+k : 10                        # Strength gradient value in psf/ft
+gamma : 100                   # Assumed unit weight of soil in psf
+e50 : 0.02                    # Strain at 50% load to failure for soft clays, for medium = 0.010, for stiff = 0.005
+alpha: 0.85                   # Adhesion factor
+Nc: 9                         # Tip bearing factor
+
+############ Pile Data ####################
+# Dimensions of the pile - Circular steel pile
+d0 : 36                       # outer diameter of pile in in.
+t : 1.5                       # wall thickness of pile in in.
+l : 200                       # length of pile in ft.
+
+# Properties of steel
+E : 29000000                  # Youngs Modulus of Steel in psi
+yield : 250000                # Yield Strength of steel in psi
+
+######## Program Data #######################
+# Discretization data
+nx : 1000
+
+# Toleranace
+tol : 0.001
+
+# Defining Q-z Curve . Hardwired API curve
+Qn : [0, 0.25, 0.5, 0.75, 0.9, 1 , 1]
+Z1n : [0, 0.002, 0.013, 0.042, 0.073, 0.1, 10000]
+
+# Defining t-z Cruve. Hardwired API curve
+tn : [0, 0.3, 0.5, 0.75, 0.9, 1.0, 0.8, 0.8]
+Z2n : [0, 0.0016, 0.0031, 0.0057, 0.0080, 0.01, 0.02, 10000]
+
+# Boundary Conditions
+
+BC : 0                            # displacement controlled BC = 0; Force controlled BC = 1
+delta_force : 2                   # if BC = 0 provide the delta (in.) and if BC = 1 provide force (lbs.)
+head_cond : 1                     # is equal to 0 for free head and 1 for fixed head
+tip_cond : 0                      # is equal to 0 for zero moment & zero shear at bottom i.e. floating pile; 1 for zero displacement and zero slope i.e. pile in rock
+plug_cond : 0                     # is equal to 0 for plugged at the bottom for tip resistance
+
