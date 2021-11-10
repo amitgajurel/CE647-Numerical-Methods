@@ -1,6 +1,6 @@
 # this script contains necessary function for the main scripts
 
-def stiffnessmatrix(num,dx ,ks,kp,z,delta_Force ,EA ,BC = 0,tip_cond=0, plug_cond = 0):
+def stiffnessmatrix(num,dx ,ks,z,qmob,delta_Force ,EA ,BC = 0,tip_cond=0, plug_cond = 0):
     """
     INPUTS
 
@@ -8,7 +8,7 @@ def stiffnessmatrix(num,dx ,ks,kp,z,delta_Force ,EA ,BC = 0,tip_cond=0, plug_con
     num             : Number of nodes i.e. number of segments + 1
     dx              : Size of each element
     ks              : Spring stiffness for side friction at all the internal points/nodes along the pile
-    kp              : Spring stiffness for the end bearing for the last node of the pile
+    qmob            : Mobilited qz at the end bearing for the last node of the pile
     delta_force     : if BC = 0 provide the delta (in.) and if BC = 1 provide force (lbs.)
     tip_cond        : is equal to 0 for displacement possible at bottom ; 1 for zero displacement i.e. pile in rock
     plug_cond       : is equal to 0 for plugged pile
@@ -26,7 +26,7 @@ def stiffnessmatrix(num,dx ,ks,kp,z,delta_Force ,EA ,BC = 0,tip_cond=0, plug_con
     R = np.zeros((num,1))
 
     # Central Nodes
-    for idx,val in enumerate(np.arange(1,num-2)):
+    for idx,val in enumerate(np.arange(1,num-1)):
         # Using 2nd order finite difference approximation for axial load tranfer equation i.e. EA d2z/dx2 -ksz=0 
         k[val,val-1] = 1
         k[val,val] = -1 * (2 + (ks[val] * dx**2)/ EA)                # Spring axial stiffness term
@@ -36,13 +36,13 @@ def stiffnessmatrix(num,dx ,ks,kp,z,delta_Force ,EA ,BC = 0,tip_cond=0, plug_con
     if BC == 0:
         k[0,] = 0                                           # zero all
         k[0,0] = 1                                          # for displacement control
-        R[0] = delta_Force/12                             # Changing the unit from input in. to ft.   
+        R[0] = -1 * delta_Force/12                             # Changing the unit from input in. to ft.   
     elif BC == 1:
         # TODO: Need to check
         k[0,] = 0
         k[1,1] = 1
         k[1,0] = -1
-        R[1] = delta_Force * dx / EA                        # Changing force to displacement
+        R[1] = -1 * delta_Force * dx / EA                        # Changing force to displacement
         
     # last row of node is used for type of boundary condition at the bottom of the pile
     
@@ -51,7 +51,7 @@ def stiffnessmatrix(num,dx ,ks,kp,z,delta_Force ,EA ,BC = 0,tip_cond=0, plug_con
         # imposing plugged at the bottom i.e. there is resistance from the soil at the bottom of the pile
         k[num-1,num-1] = 1
         k[num-1,num-2] = -1
-        R[num-1] = -kp[num-1] * z[num-1] * dx / EA
+        R[num-1] = -qmob * dx / EA
         
     elif plug_cond == 1:
         # last row of node is used for type of boundary condition at the bottom of the pile

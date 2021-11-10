@@ -95,7 +95,7 @@ while y_diff > tol:
     [k, R] = sm(BC,num,dx,ks,delta_force, head_cond, tip_cond,EI)
 
     y_solved = np.float128(np.dot(np.linalg.inv(k),R))
-    y_diff = np.mean(np.abs(y-y_solved))
+    y_diff = np.max(np.abs(y-y_solved))
     y = y_solved
     loop_count+=1
 
