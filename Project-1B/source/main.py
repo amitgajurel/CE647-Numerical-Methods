@@ -78,6 +78,7 @@ while z_diff > tol:
             ks[idx] =  np.abs(tmob * np.pi * d0/12) / np.abs(z[idx])                # Stiffness in terms of Force/Area
         else:
            ks[idx] = 0
+    
     # Working witht the API q-z curve
     intp_qn = interp1d(x=Z1n, y=Qn,kind='linear')(np.abs(z[num-1]/(d0/12)))
     qmax = su[num-1] * Nc * A0
@@ -114,34 +115,6 @@ SR = np.multiply(ks, np.abs(z))     # Skin Friction at every point
 plt = custom_plot(x=SR,y=depth,xlabel="Mobilized Skin Friction (lb)",
                   ylabel="Depth (ft)",title="Moment Vs Depth ")   
 plt.savefig('../output/MomentvsDepth.jpg')                               # Saving figure outputs
-
-# Writing a CSV file that was used to plot the above figure
-with open('../output/MomentvsDepth.csv','w') as csvfile:
-    writer = csv.writer(csvfile,delimiter=',')
-    writer.writerow(['Depth (Ft)', 'Moment (Ft-lb)'])
-    writer.writerows(zip(depth,BM))
-
-
-plt = custom_plot(x=SF,y=depth,xlabel="Shear(lbs.)",
-                  ylabel="Depth (ft)",title="Shear Vs Depth ")   
-plt.savefig('../output/ShearvsDepth.jpg')                               # Saving figure outputs
-
-# Writing a CSV file that was used to plot the above figure
-with open('../output/ShearvsDepth.csv','w') as csvfile:
-    writer = csv.writer(csvfile,delimiter=',')
-    writer.writerow(['Depth (Ft)', 'Shear (lbs.)'])
-    writer.writerows(zip(depth,SF))
-
-
-plt = custom_plot(x=SR*-1,y=depth,xlabel="Soil Resistance(lbs/ft.ft)",
-                  ylabel="Depth (ft)",title="Soil Resistance Vs Depth ")   
-plt.savefig('../output/SRvsDepth.jpg')                               # Saving figure outputs
-
-# Writing a CSV file that was used to plot the above figure
-with open('../output/SRvsDepth.csv','w') as csvfile:
-    writer = csv.writer(csvfile,delimiter=',')
-    writer.writerow(['Depth (Ft)', 'Shear (lbs.)'])
-    writer.writerows(zip(depth,SR*-1))
 
 print("This is the end")
 
