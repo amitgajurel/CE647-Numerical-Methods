@@ -31,8 +31,8 @@ su0 , k , gamma, e50, alpha,Nc,\
              BC, delta_force, head_cond, tip_cond, plug_cond = list(config.values())
 
 # Calculation of derived quantities of the piles
-A = np.pi/4 * (d0**2 - (d0-2*t)**2)                 # Crosssectional Area of the pile
-A0 = np.pi/4 * (d0**2)                              # Crossection area of the pile for plugged case
+A = np.pi/4 * (d0**2 - (d0-2*t)**2)                 # Crosssectional Area of the pile in in^2
+A0 = np.pi/4 * (d0**2)                              # Crossection area of the pile for plugged case in in^2
 EA = E*A                                            # Output units in pounds               
 
 
@@ -40,7 +40,6 @@ EA = E*A                                            # Output units in pounds
 dx = l/nx                                           # Total number of elements
 num = nx + 1                                        # Total number of nodes
 x = np.linspace(0,l,num)                            # Divides the "l" into "num" nodes starting from 0
-xi = []
 su = []
 tmax = []
 
@@ -52,7 +51,7 @@ for idx,val in enumerate(x):                        # populating each node with 
 # Initializing intial displacement field with triangular displacement field with max of 4 in of displacement
 deltamin=0.002                                  # Initial minimum displacement at the bottom of the pile
 deltamax = 0.4                                 # Initial maximum displacement at the top of the pile
-z = np.linspace(deltamax,deltamin,num)
+z = -1*np.linspace(deltamax,deltamin,num)
 
 # initializing the t values for calculating given set of displacements based on the given API t-z curves
 t = np.zeros(num)
@@ -71,23 +70,23 @@ loop_count = 0
 
 while z_diff > tol:
     # Working with the API t-z curves to fill up the matrix of ks
-    intp_tn = interp1d(x=Z2n,y=tn,kind='linear')(np.abs(z/(d0/12)))        # value of interpolated tn i.e. y-axis of t-z API curve
-     
+    intp_tn = interp1d(x=Z2n,y=tn,kind='linear')(np.abs(z/(d0/12)))             # value of interpolated tn i.e. y-axis of t-z API curve
+    
     for idx,val in enumerate(tmax):
-        tmob = intp_tn[idx] * tmax[idx]
-        ks[idx] =  (tmob * np.pi * d0/12) / z[idx]                     # Stiffness in terms of Force/Area
-       
+        if np.abs(z[idx])>0.00000001:
+            tmob = intp_tn[idx] * tmax[idx] * np.sign(z[idx])                       # using sign to preserve the direction
+            ks[idx] =  np.abs(tmob * np.pi * d0/12) / np.abs(z[idx])                # Stiffness in terms of Force/Area
+        else:
+           ks[idx] = 0
     # Working witht the API q-z curve
     intp_qn = interp1d(x=Z1n, y=Qn,kind='linear')(np.abs(z[num-1]/(d0/12)))
     qmax = su[num-1] * Nc * A0
-    qmob = intp_qn * qmax
-    kp[num-1]= qmob / z[num-1]
-
-
-    [k, R] = sm(num,dx,ks,z,kp,delta_force, EA, BC,tip_cond, plug_cond)
+    qmob = intp_qn * qmax * np.sign(z[num-1])                                   # ensuring direction is preserved for sign
+    
+    [k, R] = sm(num,dx,ks,z,qmob,delta_force, EA, BC,tip_cond, plug_cond)
 
     z_solved = np.dot(np.linalg.inv(k),R)
-    z_diff = np.max(np.abs(z-z_solved))
+    z_diff = np.max(np.abs(z-z_solved))/(d0/12)
     z = z_solved
     loop_count+=1
     if loop_count > 1000:
@@ -97,8 +96,8 @@ while z_diff > tol:
 
 # Depth Vs Displacement
 depth = np.linspace(0,l,num)                                             # Creating a plotting value along the depth
-displacement = [x for x in z]*12                             # Changing the list of one element arrary to float and multiplying to get disp. in in.                                                    # Changing the ft to in. to display the displacement
-plt = custom_plot(x=z*12,y=depth,xlabel="Displacement(in.)",
+displacement = [x for x in np.abs(z)]*12                             # Changing the list of one element arrary to float and multiplying to get disp. in in.                                                    # Changing the ft to in. to display the displacement
+plt = custom_plot(x=z*-12,y=depth,xlabel="Displacement(in.)",
                   ylabel="Depth (ft)",title="Displacement Vs Depth ")   
 plt.savefig('../output/DisplvsDepth.jpg')                               # Saving figure outputs
 
@@ -108,27 +107,11 @@ with open('../output/DisplvsDepth.csv','w') as csvfile:
     writer.writerow(['Depth (Ft)', 'Displacement (in)'])
     writer.writerows(zip(depth,displacement))
 
+z = np.concatenate(z,axis = 0)                        
+SR = np.multiply(ks, np.abs(z))     # Skin Friction at every point
 
-
-BM = np.zeros(num)
-SF = np.zeros(num)
-SR = np.zeros(num)
-
-# Depth, Shear Force, Soil resistance Vs Bending moment
-for idx,val in enumerate(np.arange(0,num-4)):
-    # using forward difference for 0 to num-4. i.e. leaving last 4 nodes
-    BM[val] = EI * (y[val]-2*y[val+1]+y[val+2])/dx**2
-    SF[val] = EI * (-y[val]+3*y[val+1]-3*y[val+2]+y[val+3])/dx**3
-    SR[val] = EI * (y[val]-4*y[val+1]+6*y[val+2]-4*y[val+3]+y[val+4])/dx**4
-
-for idx,val in enumerate(np.arange(num-4,num)):
-    # using backward difference for num-4 to num. i.e. including last 4 nodes
-    BM[val] = EI * (y[val]-2*y[val-1]+y[val-2])/dx**2
-    SF[val] = EI * (y[val]-3*y[val-1]+3*y[val-2]-y[val-3])/dx**3
-    SR[val] = EI * (y[val]-4*y[val-1]+6*y[val-2]-4*y[val-3]+y[val-4])/dx**4
-
-depth = np.linspace(0,l,num)                                             # Creating a plotting value along the depth
-plt = custom_plot(x=BM,y=depth,xlabel="Moment(ft-lb)",
+# Creating a plotting value along the depth
+plt = custom_plot(x=SR,y=depth,xlabel="Mobilized Skin Friction (lb)",
                   ylabel="Depth (ft)",title="Moment Vs Depth ")   
 plt.savefig('../output/MomentvsDepth.jpg')                               # Saving figure outputs
 
