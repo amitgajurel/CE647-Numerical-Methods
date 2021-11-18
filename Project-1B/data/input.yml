@@ -2,8 +2,8 @@
 ---
 ############ Soil Data ###################
 
-su0 : 100                     # Mudline strength value in psf
-k : 0                         # Strength gradient value in psf/ft
+su0 : 10                     # Mudline strength value in psf
+k : 10                         # Strength gradient value in psf/ft
 gamma : 100                   # Assumed unit weight of soil in psf
 e50 : 0.02                    # Strain at 50% load to failure for soft clays, for medium = 0.010, for stiff = 0.005
 alpha: 0.85                   # Adhesion factor
