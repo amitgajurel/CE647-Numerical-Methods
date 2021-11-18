@@ -1,0 +1,61 @@
+PROJECT II.
+
+Write a MATLAB program for finite element analysis of a circular footing on a linearly
+elastic, isotropic foundation. The program should employ linear displacement
+rectangular (4-node) elements. The program should also be capable of simulating an
+elastic modulus profile that increases linearly with depth as follows:
+E=E0 + E1y
+where E0 is the elastic modulus at the ground surface, and E1 is the rate of increase in
+elastic modulus with depth. Assume Poisson’s ratio is constant at all depths.
+The program should construct a rectangular mesh comprised of uniform rectangular
+elements created from a grid of m nodes in the y-direction and n nodes in the x-direction.
+The elements should have a horizontal dimension 2a vertical dimension 2b.
+The program should analyze the elastic response for a uniform footing pressure qs, acting
+on nf elements beneath the footing.
+Inputs should include:
+Mesh data: m, n, a, b
+Material data E0, E1, 
+Load data: qs, nf
+The program should be organized in logical sections clearly explained by comment
+statements. The sections of the program should include:
+Data Input
+Mesh Creation
+Creation of Global Stiffness Matrix including following sub-sections:
+Strain-displacement matrix [B]
+Constitutive matrix [C]
+Element stiffness matrix using Gauss 2-pt integration in both directions
+Imposition of displacement boundary constraints
+Construction of Load Vector
+Solution by Gauss elimination for displacements
+Computation of stresses at each integration point
+
+Once the program is written, perform analyses to find the following:
+1. Contours of vertical stress for a uniform unit pressure (qs=1) for =0.35 and constant
+E. Compare your numerical solution to the analytical solution for pressure beneath a
+circular footing. Check your solution for vertical stresses along the centerline of the
+footing.
+2. Compute contours of vertical stress for an elastic modulus that increases at a rate
+E1B/E0=0.5. Compare to your contours for the solution for a uniform elastic
+modulus.
+3. Plot contours of the change in mean total stress for undrained loading for a uniform
+surface pressure qs = 400 psf, footing diameter B=12 ft, and the soil properties in
+Table 1.
+4. Plot contours of excess pore water pressure for the loading in Part 3 and soil
+properties in Part 3.
+5. Compute the initial undrained settlement for the loading and soil properties in Part 3.
+6. Estimate the primary consolidation settlement (vertical displacement) at the ground
+surface for the loading and soil properties in Part 3 using a stress path analysis
+approach.
+Table 1. Soil Properties for Parts 3-6.
+Property Value
+Elastic Modulus at Surface, E0
+Elastic Modulus Gradient, E1
+Henkel Pore Pressure Coefficient, a
+Compression Ratio, CR
+Effective Unit Weight, ’
+
+100,000 psf
+5,000 psf/ft
+1.0
+0.25
+50 pcf

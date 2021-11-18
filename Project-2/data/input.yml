@@ -1,0 +1,27 @@
+# This is a text file which will be used as an input for the program
+---
+############ Soil Data ###################
+
+E0 : 100000                   # Elastic modulus at surface psf
+El : 5000                     # ELastic modulus gradient value in psf/ft
+alpha : 1                     # Henkel Pore Pressure Coefficient
+mew : 0.25                    # Poision's ratio
+cr : 0.25                     # Compression ratio
+gamma_prime : 50              # Effective unit weight pcf
+
+############ Pile Data ####################
+# Dimensions of the circular footing
+d : 36                        # diameter of footing in ft.
+
+######## Program Data #######################
+
+# Mesh data - Rectangular mesh data for uniform rectangular element
+m : 50                        # number of nodes in y-direction
+n : 50                        # number of nodes in x-direction
+a : 1                         # element with horizontal dimension of 2a
+b : 1                         # element with vertical dimension of 2b
+dof : 2                       # degrees of freedom at each node (i.e. displacement in x and y direction)
+
+# Load data
+qs : 1000                     # Uniform footing pressure qs
+nf : 3                        # number of elements at which qs is acting
